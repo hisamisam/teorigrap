@@ -11,7 +11,11 @@
     <div id="graph-container">
         <canvas id="graph-canvas" width="800" height="600"></canvas>
     </div>
-    <button onclick="colorGraph()">Warnai Graf</button>
+    <div>
+        <button onclick="setMode('node')">Tambah Simpul</button>
+        <button onclick="setMode('edge')">Tambah Sisi</button>
+        <button onclick="colorGraph()">Warnai Graf</button>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
