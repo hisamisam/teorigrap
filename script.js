@@ -41,6 +41,7 @@ class Graph {
 const canvas = document.getElementById('graph-canvas');
 const ctx = canvas.getContext('2d');
 const graph = new Graph();
+let mode = 'node';
 let selectedNode = null;
 
 canvas.addEventListener('click', (event) => {
@@ -48,34 +49,40 @@ canvas.addEventListener('click', (event) => {
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
 
-    let clickedNode = null;
-    for (let i = 0; i < graph.nodes.length; i++) {
-        const node = graph.nodes[i];
-        const distance = Math.sqrt((node.x - x) ** 2 + (node.y - y) ** 2);
-        if (distance < 20) {
-            clickedNode = i;
-            break;
-        }
-    }
-
-    if (clickedNode !== null) {
-        if (selectedNode === null) {
-            selectedNode = clickedNode;
-        } else {
-            graph.addEdge(selectedNode, clickedNode);
-            selectedNode = null;
-        }
-    } else {
+    if (mode === 'node') {
         graph.addNode(x, y);
-        selectedNode = null; // reset selection if a new node is added
+    } else if (mode === 'edge') {
+        let clickedNode = null;
+        for (let i = 0; i < graph.nodes.length; i++) {
+            const node = graph.nodes[i];
+            const distance = Math.sqrt((node.x - x) ** 2 + (node.y - y) ** 2);
+            if (distance < 20) {
+                clickedNode = i;
+                break;
+            }
+        }
+
+        if (clickedNode !== null) {
+            if (selectedNode === null) {
+                selectedNode = clickedNode;
+            } else {
+                graph.addEdge(selectedNode, clickedNode);
+                selectedNode = null;
+            }
+        }
     }
 
     drawGraph();
 });
 
+function setMode(newMode) {
+    mode = newMode;
+    selectedNode = null;
+}
+
 function drawGraph() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
+
     for (let i = 0; i < graph.edges.length; i++) {
         const node1 = graph.nodes[graph.edges[i][0]];
         const node2 = graph.nodes[graph.edges[i][1]];
